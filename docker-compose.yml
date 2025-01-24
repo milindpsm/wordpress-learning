@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  db:
+    image: mysql:5.7
+    container_name: wp_learning_db
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wp_learning
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+
+volumes:
+  db_data:
